@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken';
+
 function generatePasswords(){
     // + 1 para não pegar o valor 0;
     // .toString(36) pega letras tbm;
@@ -12,4 +14,12 @@ function generatePasswords(){
     return newPassword;
 }
 
-export {generatePasswords};
+function generateToken(idLogin,user){
+    const secret = "aceitamos o amor que achamos merecer";
+    return jwt.sign({infoUser: {
+        idUser: idLogin,
+        userName: user
+    }},secret,{expiresIn: 60 * 60 * 5});
+}
+
+export {generatePasswords,generateToken};
