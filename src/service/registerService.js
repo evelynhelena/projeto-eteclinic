@@ -7,8 +7,27 @@ async function inserUsser(email , password, usuario) {
     conn.end();
 }
 
-function updateUser() {
-
+async function updateUser(email , password, usuario,id) {
+    const conn = await database.connect();
+    const sql = `update tbl_usuarios set email = ? , senha = ?, usuario = ? where id_login = ${id}`;
+    const newUserData = [email , password, usuario];
+    conn.query(sql,newUserData);
+    conn.end();
 }
 
-export default {inserUsser};
+async function desative(id) {
+    const conn = await database.connect();
+    const sql = `update tbl_usuarios set usuario_deletado = 1 where id_login = ${id}`;
+    conn.query(sql);
+    conn.end();
+}
+
+async function findAll() {
+    const conn = await database.connect();
+    const sql = `select * from tbl_usuarios where usuario_deletado = 0`;
+    const [rows] = await conn.query(sql);
+    conn.end();
+    return rows;
+}
+
+export default {inserUsser,updateUser,desative,findAll};
