@@ -1,4 +1,8 @@
 import jwt from 'jsonwebtoken';
+import nodeMailer from "nodeMailer";
+import {config} from "./smtp.js"
+
+const transport = nodeMailer.createTransport(config);
 
 function generatePasswords(){
     // + 1 para não pegar o valor 0;
@@ -22,4 +26,21 @@ function generateToken(idLogin,user){
     }},secret,{expiresIn: 60 * 60 * 5});
 }
 
-export {generatePasswords,generateToken};
+function sendEmail(email,name,password){
+    transport.sendMail({
+        subject: "Redefinição de Senha da eteclinic",
+        from: 'Suport Eteclinic <Suporte@eteclic.com>',
+        to: email,
+        html: 
+        `<html>
+            <body>
+                <p>${name}! Tudo Bem?</p>
+                <p>Você solicitou uma redefinição de senha</p>
+                <p>Sua nova senha de acesso é: <strong>${password}</strong></p>
+                <a href="https://www.google.com">Clique aqui para acessar</a>
+            </body>
+        </html>`
+    });
+}
+
+export {generatePasswords,generateToken,sendEmail};

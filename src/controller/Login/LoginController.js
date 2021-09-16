@@ -3,6 +3,7 @@ import db from "../../service/LoginService.js";
 import {
   generatePasswords,
   generateToken,
+  sendEmail,
 } from "../../helpers/userFeatures.js";
 
 const router = express.Router();
@@ -28,7 +29,8 @@ router.post("/reset", async (req, res) => {
   const newPassword = generatePasswords();
   try {
     await db.changePassword(newPassword, userEmail);
-    res.status(200).send({ mensage: "Senha Alterada com Sucesso" });
+    sendEmail(userEmail,"Evelyn", newPassword);
+    res.status(200).send({ mensage: "Senha Alterada com Sucesso, enviado no seu email" });
   } catch {
     res.status(500).send({ error: "Internal Server Error" });
   }
