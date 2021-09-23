@@ -1,7 +1,16 @@
 import express from 'express';
 const router = express.Router();
 import db from "../../service/registerService.js";
-router.post('/', async (req, res) => {
+import {body, validationResult} from "express-validator";
+
+router.post('/', [
+    body('email').isEmail().withMessage('Informe um email valido'),
+    body('password').isLength({min: 8 , max:15}).withMessage('Informe uma senha entre 8 e 15 caracteres'),
+],async (req, res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).send({errors: errors.array()});
+    }
     //Para Cadastrar 
     const {email,password,userName} = req.body;
     try{
