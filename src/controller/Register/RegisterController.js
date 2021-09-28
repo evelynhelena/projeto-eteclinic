@@ -6,6 +6,12 @@ import {body, validationResult} from "express-validator";
 router.post('/', [
     body('email').isEmail().withMessage('Informe um email valido'),
     body('password').isLength({min: 8 , max:15}).withMessage('Informe uma senha entre 8 e 15 caracteres'),
+    body('userName').custom((userName) => {
+        if(userName && userName.split(' ').length > 1) {
+            return Promise.reject(" Nome de usuário não pode conter espaços")
+        };
+        return true
+    })
 ],async (req, res) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()){
@@ -34,7 +40,6 @@ router.put('/:id', async (req, res) => {
 });
 
 router.delete('/:id', async (req, res) => {
-    //Para Cadastrar 
     const id = req.params.id;
     try{
         await db.desative(id);
