@@ -30,4 +30,12 @@ async function findAll() {
     return rows;
 }
 
-export default {inserUsser,updateUser,desative,findAll};
+async function checkEmail(userEmail){
+    const conn = await database.connect();
+    const sql = "select * from tbl_usuarios where email = ?";
+    const [rows] = await conn.query(sql,userEmail);
+    conn.end();
+    return rows;
+}
+
+export default {inserUsser,updateUser,desative,findAll,checkEmail};

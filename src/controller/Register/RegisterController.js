@@ -20,6 +20,10 @@ router.post('/', [
     //Para Cadastrar 
     const {email,password,userName} = req.body;
     try{
+        const checkMailUser = await db.checkEmail(email);
+        if(checkMailUser.length > 0){
+            return res.status(400).send({mensage:'Email já cadastrado no sistema'});
+        }
         await db.inserUsser(email,password,userName);
         res.status(201).send({mensage:'usuario cadastrado com sucesso'});
     }catch{
