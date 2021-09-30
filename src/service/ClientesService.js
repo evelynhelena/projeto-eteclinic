@@ -14,7 +14,7 @@ async function inserClient(client) {
         client.telefone,
         client.celular,
         client.email,
-        client.tipoSanguineo]
+        client.tipoSanguineo];
     conn.query(sql,newClientData);
     conn.end();
 }
@@ -32,7 +32,7 @@ async function updateClient(client,id) {
         client.fkEndereco,
         client.clienteDeletado,
         id,
-    ]
+    ];
     conn.query(sql,clientData);
     conn.end();
 }
